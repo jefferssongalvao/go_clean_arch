@@ -27,29 +27,6 @@ API em **Go** seguindo os princípios de Clean Architecture, com **PostgreSQL** 
 
 ## Configuração
 
-1. Copie o arquivo de exemplo de variáveis de ambiente:
-
-```bash
-cp .env-example .env
-```
-
-2. Ajuste `.env` conforme necessário:
-
-```env
-DB_USER=postgres
-DB_PASSWORD=123456789
-DB_NAME=school
-DB_HOST=db
-DB_PORT=5432
-API_PORT=8080
-```
-
----
-
-## Comandos Make
-
-### Inicializar projeto
-
 ```bash
 make init
 ```
