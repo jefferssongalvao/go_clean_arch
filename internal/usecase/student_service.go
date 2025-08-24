@@ -27,16 +27,16 @@ func (s *StudentService) GetByID(id uint) (*entities.Student, error) {
 	return s.repo.FindByID(id)
 }
 
-func (s *StudentService) Create(student *entities.Student) error {
+func (s *StudentService) Create(student *entities.Student) (*entities.Student, error) {
 	if student.Name == "" {
-		return ErrInvalidStudent
+		return nil, ErrInvalidStudent
 	}
 	return s.repo.Create(student)
 }
 
-func (s *StudentService) Update(student *entities.Student) error {
+func (s *StudentService) Update(student *entities.Student) (*entities.Student, error) {
 	if student.Name == "" {
-		return ErrInvalidStudent
+		return nil, ErrInvalidStudent
 	}
 	return s.repo.Update(student)
 }

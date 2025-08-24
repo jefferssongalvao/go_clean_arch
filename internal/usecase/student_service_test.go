@@ -22,12 +22,12 @@ func (f *fakeRepo) FindByID(id uint) (*entities.Student, error) {
 	}
 	return nil, errors.New("not found")
 }
-func (f *fakeRepo) Create(student *entities.Student) error {
+func (f *fakeRepo) Create(student *entities.Student) (*entities.Student, error) {
 	f.students = append(f.students, *student)
-	return nil
+	return student, nil
 }
-func (f *fakeRepo) Update(student *entities.Student) error {
-	return nil
+func (f *fakeRepo) Update(student *entities.Student) (*entities.Student, error) {
+	return student, nil
 }
 func (f *fakeRepo) Delete(id uint) error {
 	return nil
@@ -37,9 +37,12 @@ func TestStudentService_Create(t *testing.T) {
 	repo := &fakeRepo{}
 	svc := NewStudentService(repo)
 	student := &entities.Student{Name: "Clark Kent"}
-	err := svc.Create(student)
+	created, err := svc.Create(student)
 	if err != nil {
 		t.Errorf("esperado sucesso, obteve erro: %v", err)
+	}
+	if created == nil || created.Name != "Clark Kent" {
+		t.Errorf("esperado estudante criado com nome 'Clark Kent', obteve %+v", created)
 	}
 }
 
@@ -47,8 +50,11 @@ func TestStudentService_Create_Invalid(t *testing.T) {
 	repo := &fakeRepo{}
 	svc := NewStudentService(repo)
 	student := &entities.Student{Name: ""}
-	err := svc.Create(student)
+	created, err := svc.Create(student)
 	if err == nil {
 		t.Error("esperado erro para nome vazio")
+	}
+	if created != nil {
+		t.Error("esperado estudante nulo para nome vazio")
 	}
 }

@@ -39,3 +39,6 @@ migrate:
 
 db:
 	docker compose exec $(DB_SERVICE_NAME) psql -U postgres -d school
+
+test:
+	docker compose run --rm test

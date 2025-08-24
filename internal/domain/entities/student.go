@@ -1,6 +1,8 @@
 package entities
 
-import valueobjects "github.com/jefferssongalvao/go_clean_arch/internal/domain/value_objects"
+import (
+	valueobjects "github.com/jefferssongalvao/go_clean_arch/internal/domain/value_objects"
+)
 
 type Student struct {
 	ID     uint               `json:"id"`
@@ -13,8 +15,8 @@ type Student struct {
 type StudentRepository interface {
 	FindAll(name string) ([]Student, error)
 	FindByID(id uint) (*Student, error)
-	Create(student *Student) error
-	Update(student *Student) error
+	Create(student *Student) (*Student, error)
+	Update(student *Student) (*Student, error)
 	Delete(id uint) error
 }
 

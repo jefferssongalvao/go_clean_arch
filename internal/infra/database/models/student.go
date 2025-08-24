@@ -29,6 +29,6 @@ func StudentFromEntity(e *entities.Student) *Student {
 		Name:   e.Name,
 		Email:  e.Email.String(),
 		UserID: e.UserID,
-		User:   *UserFromEntity(e.User),
+		// Não preencher User ao criar, apenas UserID
 	}
 }

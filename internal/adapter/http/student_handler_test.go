@@ -20,9 +20,13 @@ func (f *fakeService) GetAll(name string) ([]entities.Student, error) {
 func (f *fakeService) GetByID(id uint) (*entities.Student, error) {
 	return &entities.Student{ID: id, Name: "Test", Email: valueobjects.Email{}}, nil
 }
-func (f *fakeService) Create(student *entities.Student) error { return nil }
-func (f *fakeService) Update(student *entities.Student) error { return nil }
-func (f *fakeService) Delete(id uint) error                   { return nil }
+func (f *fakeService) Create(student *entities.Student) (*entities.Student, error) {
+	return student, nil
+}
+func (f *fakeService) Update(student *entities.Student) (*entities.Student, error) {
+	return student, nil
+}
+func (f *fakeService) Delete(id uint) error { return nil }
 
 func TestStudentHandler_GetAll(t *testing.T) {
 	gin.SetMode(gin.TestMode)

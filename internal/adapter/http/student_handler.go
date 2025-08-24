@@ -14,8 +14,8 @@ import (
 type StudentServiceInterface interface {
 	GetAll(name string) ([]entities.Student, error)
 	GetByID(id uint) (*entities.Student, error)
-	Create(student *entities.Student) error
-	Update(student *entities.Student) error
+	Create(student *entities.Student) (*entities.Student, error)
+	Update(student *entities.Student) (*entities.Student, error)
 	Delete(id uint) error
 }
 
@@ -89,19 +89,36 @@ func (h *StudentHandler) Create(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid email"})
 		return
 	}
+	pass, err := valueobjects.NewPassword(req.User.Password)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid password"})
+		return
+	}
 	student := entities.Student{
 		Name:  req.Name,
 		Email: email,
+		User: &entities.User{
+			Username: req.User.Username,
+			Password: *pass,
+		},
 	}
-	if err := h.svc.Create(&student); err != nil {
+
+	respCreate, err := h.svc.Create(&student)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 	resp := dto.StudentResponse{
-		ID:    student.ID,
-		Name:  student.Name,
-		Email: student.Email.String(),
+		ID:    respCreate.ID,
+		Name:  respCreate.Name,
+		Email: respCreate.Email.String(),
+		User: dto.UserResponse{
+			ID:       respCreate.User.ID,
+			Username: respCreate.User.Username,
+		},
 	}
+
 	c.JSON(http.StatusCreated, resp)
 }
 
@@ -126,14 +143,19 @@ func (h *StudentHandler) Update(c *gin.Context) {
 		Name:  req.Name,
 		Email: email,
 	}
-	if err := h.svc.Update(&student); err != nil {
+	respUpdate, err := h.svc.Update(&student)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	resp := dto.StudentResponse{
-		ID:    student.ID,
-		Name:  student.Name,
-		Email: student.Email.String(),
+		ID:    respUpdate.ID,
+		Name:  respUpdate.Name,
+		Email: respUpdate.Email.String(),
+		User: dto.UserResponse{
+			ID:       respUpdate.User.ID,
+			Username: respUpdate.User.Username,
+		},
 	}
 	c.JSON(http.StatusOK, resp)
 }

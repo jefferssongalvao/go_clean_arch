@@ -34,6 +34,18 @@ services:
       db:
         condition: service_healthy
     command: ['./go-clean-api']
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder # 👈 usa a imagem do stage que tem o Go instalado
+    container_name: go_clean_test
+    command: sh -c "go test ./... -v"
+    volumes:
+      - .:/app # monta o código local no container (pra não precisar rebuildar a cada teste)
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   postgresql_data:

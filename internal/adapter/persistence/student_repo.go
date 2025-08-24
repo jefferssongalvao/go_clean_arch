@@ -39,12 +39,43 @@ func (r *studentRepo) FindByID(id uint) (*entities.Student, error) {
 	return (&student).ToEntity(), nil
 }
 
-func (r *studentRepo) Create(student *entities.Student) error {
-	return r.db.Create(student).Error
+func (r *studentRepo) Create(student *entities.Student) (*entities.Student, error) {
+	var createdStudent *entities.Student
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		userModel := models.UserFromEntity(student.User)
+		if err := tx.Create(userModel).Error; err != nil {
+			return err
+		}
+
+		student.UserID = userModel.ID
+		studentModel := models.StudentFromEntity(student)
+
+		if err := tx.Create(studentModel).Error; err != nil {
+			return err
+		}
+
+		// Buscar estudante criado com preload do usuário
+		var dbStudent models.Student
+		if err := tx.Preload("User").First(&dbStudent, studentModel.ID).Error; err != nil {
+			return err
+		}
+		createdStudent = dbStudent.ToEntity()
+		return nil
+	})
+	return createdStudent, err
 }
 
-func (r *studentRepo) Update(student *entities.Student) error {
-	return r.db.Save(student).Error
+func (r *studentRepo) Update(student *entities.Student) (*entities.Student, error) {
+	studentModel := models.StudentFromEntity(student)
+	if err := r.db.Save(studentModel).Error; err != nil {
+		return nil, err
+	}
+	// Buscar estudante atualizado com preload do usuário
+	var dbStudent models.Student
+	if err := r.db.Preload("User").First(&dbStudent, studentModel.ID).Error; err != nil {
+		return nil, err
+	}
+	return dbStudent.ToEntity(), nil
 }
 
 func (r *studentRepo) Delete(id uint) error {
