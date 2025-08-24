@@ -1,6 +1,9 @@
 package usecase
 
-import "github.com/jefferssongalvao/go_clean_arch/internal/domain"
+import (
+	"github.com/jefferssongalvao/go_clean_arch/internal/domain"
+	"github.com/jefferssongalvao/go_clean_arch/internal/domain/errors"
+)
 
 type StudentService struct {
 	repo domain.StudentRepository
@@ -20,14 +23,14 @@ func (s *StudentService) GetByID(id uint) (*domain.Student, error) {
 
 func (s *StudentService) Create(student *domain.Student) error {
 	if student.Name == "" {
-		return domain.ErrInvalidStudent
+		return errors.ErrInvalidStudent
 	}
 	return s.repo.Create(student)
 }
 
 func (s *StudentService) Update(student *domain.Student) error {
 	if student.Name == "" {
-		return domain.ErrInvalidStudent
+		return errors.ErrInvalidStudent
 	}
 	return s.repo.Update(student)
 }
