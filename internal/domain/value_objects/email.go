@@ -1,7 +1,9 @@
 package valueobjects
 
 import (
+	"database/sql/driver"
 	"errors"
+	"fmt"
 	"regexp"
 	"strings"
 )
@@ -38,4 +40,23 @@ func (e Email) String() string {
 // Equals compara dois Value Objects de Email.
 func (e Email) Equals(other Email) bool {
 	return e.value == other.value
+}
+
+// Value implementa a interface driver.Valuer para o GORM persistir o Email.
+func (e Email) Value() (driver.Value, error) {
+	return e.value, nil
+}
+
+// Scan implementa a interface sql.Scanner para o GORM ler o Email do banco.
+func (e *Email) Scan(value interface{}) error {
+	str, ok := value.(string)
+	if !ok {
+		return fmt.Errorf("Email: tipo inválido para scan")
+	}
+	email, err := NewEmail(str)
+	if err != nil {
+		return err
+	}
+	*e = email
+	return nil
 }

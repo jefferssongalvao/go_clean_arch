@@ -11,8 +11,8 @@ func Run() {
 	db := database.DB
 
 	students := []models.Student{
-		{Name: "Bruce Wayne"},
-		{Name: "Clark Kent"},
+		{Name: "Bruce Wayne", Email: "bruce@gmail.com"},
+		{Name: "Clark Kent", Email: "clark@gmail.com"},
 	}
 
 	for _, s := range students {
