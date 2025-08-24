@@ -1,10 +1,10 @@
-package migrate
+package migrations
 
 import (
 	"log"
 
-	"github.com/jefferssongalvao/go_clean_arch/infra/database"
-	"github.com/jefferssongalvao/go_clean_arch/infra/database/models"
+	"github.com/jefferssongalvao/go_clean_arch/internal/infra/database"
+	"github.com/jefferssongalvao/go_clean_arch/internal/infra/database/models"
 )
 
 func Run() {

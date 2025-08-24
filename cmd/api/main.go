@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 
-	"github.com/jefferssongalvao/go_clean_arch/config"
 	"github.com/jefferssongalvao/go_clean_arch/internal/adapter/http"
 	"github.com/jefferssongalvao/go_clean_arch/internal/adapter/persistence"
-	"github.com/jefferssongalvao/go_clean_arch/usecase"
+	"github.com/jefferssongalvao/go_clean_arch/internal/config"
+	"github.com/jefferssongalvao/go_clean_arch/internal/usecase"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
