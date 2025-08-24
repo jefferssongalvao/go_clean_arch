@@ -6,7 +6,7 @@ import (
 	"github.com/jefferssongalvao/go_clean_arch/config"
 	"github.com/jefferssongalvao/go_clean_arch/internal/adapter/http"
 	"github.com/jefferssongalvao/go_clean_arch/internal/adapter/persistence"
-	"github.com/jefferssongalvao/go_clean_arch/internal/usecase"
+	"github.com/jefferssongalvao/go_clean_arch/usecase"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

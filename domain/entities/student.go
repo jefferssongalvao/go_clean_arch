@@ -1,8 +1,11 @@
-package domain
+package entities
+
+import valueobjects "github.com/jefferssongalvao/go_clean_arch/domain/value_objects"
 
 type Student struct {
-	ID   uint   `json:"id"`
-	Name string `json:"name"`
+	ID    uint               `json:"id"`
+	Name  string             `json:"name"`
+	Email valueobjects.Email `json:"email"`
 }
 
 type StudentRepository interface {

@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jefferssongalvao/go_clean_arch/internal/domain"
-	"github.com/jefferssongalvao/go_clean_arch/internal/usecase"
+	"github.com/jefferssongalvao/go_clean_arch/domain/entities"
+	"github.com/jefferssongalvao/go_clean_arch/usecase"
 )
 
 type StudentHandler struct {
@@ -42,7 +42,7 @@ func (h *StudentHandler) GetByID(c *gin.Context) {
 }
 
 func (h *StudentHandler) Create(c *gin.Context) {
-	var student domain.Student
+	var student entities.Student
 	if err := c.ShouldBindJSON(&student); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -56,7 +56,7 @@ func (h *StudentHandler) Create(c *gin.Context) {
 
 func (h *StudentHandler) Update(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	var student domain.Student
+	var student entities.Student
 	if err := c.ShouldBindJSON(&student); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
