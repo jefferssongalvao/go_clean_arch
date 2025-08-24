@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jefferssongalvao/go_clean_arch/internal/adapter/http/dto"
 	"github.com/jefferssongalvao/go_clean_arch/internal/domain/entities"
 	valueobjects "github.com/jefferssongalvao/go_clean_arch/internal/domain/value_objects"
 )
@@ -37,13 +38,18 @@ func (h *StudentHandler) GetAll(c *gin.Context) {
 		c.JSON(http.StatusNoContent, nil)
 		return
 	}
+
 	// Mapear para DTO de resposta
-	var resp []StudentResponse
+	var resp []dto.StudentResponse
 	for _, s := range students {
-		resp = append(resp, StudentResponse{
+		resp = append(resp, dto.StudentResponse{
 			ID:    s.ID,
 			Name:  s.Name,
 			Email: s.Email.String(),
+			User: dto.UserResponse{
+				ID:       s.User.ID,
+				Username: s.User.Username,
+			},
 		})
 	}
 	c.JSON(http.StatusOK, resp)
@@ -60,16 +66,20 @@ func (h *StudentHandler) GetByID(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
 		return
 	}
-	resp := StudentResponse{
+	resp := dto.StudentResponse{
 		ID:    student.ID,
 		Name:  student.Name,
 		Email: student.Email.String(),
+		User: dto.UserResponse{
+			ID:       student.User.ID,
+			Username: student.User.Username,
+		},
 	}
 	c.JSON(http.StatusOK, resp)
 }
 
 func (h *StudentHandler) Create(c *gin.Context) {
-	var req StudentRequest
+	var req dto.StudentRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -87,7 +97,7 @@ func (h *StudentHandler) Create(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	resp := StudentResponse{
+	resp := dto.StudentResponse{
 		ID:    student.ID,
 		Name:  student.Name,
 		Email: student.Email.String(),
@@ -101,7 +111,7 @@ func (h *StudentHandler) Update(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
 		return
 	}
-	var req StudentRequest
+	var req dto.StudentRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -120,7 +130,7 @@ func (h *StudentHandler) Update(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	resp := StudentResponse{
+	resp := dto.StudentResponse{
 		ID:    student.ID,
 		Name:  student.Name,
 		Email: student.Email.String(),

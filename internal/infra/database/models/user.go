@@ -1,6 +1,9 @@
 package models
 
-import "github.com/jefferssongalvao/go_clean_arch/internal/domain/entities"
+import (
+	"github.com/jefferssongalvao/go_clean_arch/internal/domain/entities"
+	valueobjects "github.com/jefferssongalvao/go_clean_arch/internal/domain/value_objects"
+)
 
 type User struct {
 	ID       uint   `gorm:"primaryKey"`
@@ -9,10 +12,14 @@ type User struct {
 }
 
 func (m *User) ToEntity() *entities.User {
+	password, err := valueobjects.NewPassword(m.Password)
+	if err != nil {
+		return nil
+	}
 	return &entities.User{
 		ID:       m.ID,
 		Username: m.Username,
-		Password: m.Password,
+		Password: *password,
 	}
 }
 
@@ -23,6 +30,6 @@ func UserFromEntity(e *entities.User) *User {
 	return &User{
 		ID:       e.ID,
 		Username: e.Username,
-		Password: e.Password,
+		Password: e.Password.Hash(),
 	}
 }

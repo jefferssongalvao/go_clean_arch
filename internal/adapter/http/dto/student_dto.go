@@ -1,5 +1,4 @@
-// DTOs para entrada e saída de Student
-package http
+package dto
 
 type StudentRequest struct {
 	Name  string `json:"name" binding:"required"`
@@ -7,7 +6,8 @@ type StudentRequest struct {
 }
 
 type StudentResponse struct {
-	ID    uint   `json:"id"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	ID    uint         `json:"id"`
+	Name  string       `json:"name"`
+	Email string       `json:"email"`
+	User  UserResponse `json:"user"`
 }

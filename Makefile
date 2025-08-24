@@ -3,7 +3,7 @@ DB_SERVICE_NAME=db
 APP_CONTAINER_NAME=go_clean_api
 APP_BINARY_PATH=./go-clean-api
 
-.PHONY: init up down logs migrate seed
+.PHONY: init up down logs migrate seed db
 
 # Inicializa tudo
 init:
@@ -29,10 +29,13 @@ up:
 	docker compose up -d --build
 
 down:
-	docker compose down --volumes
+	docker compose down
 
 logs:
 	docker compose logs -f $(APP_SERVICE_NAME)
 
 migrate:
 	docker compose exec $(APP_SERVICE_NAME) sh -c '$(APP_BINARY_PATH) migrate'
+
+db:
+	docker compose exec $(DB_SERVICE_NAME) psql -U postgres -d school

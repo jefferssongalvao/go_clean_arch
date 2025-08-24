@@ -2,6 +2,7 @@ package persistence
 
 import (
 	"github.com/jefferssongalvao/go_clean_arch/internal/domain/entities"
+	"github.com/jefferssongalvao/go_clean_arch/internal/infra/database/models"
 	"gorm.io/gorm"
 )
 
@@ -14,21 +15,28 @@ func NewStudentRepo(db *gorm.DB) entities.StudentRepository {
 }
 
 func (r *studentRepo) FindAll(name string) ([]entities.Student, error) {
-	var students []entities.Student
-	query := r.db
+	var students []models.Student
+	query := r.db.Preload("User")
 	if name != "" {
 		query = query.Where("name ILIKE ?", "%"+name+"%")
 	}
 	err := query.Find(&students).Error
-	return students, err
+
+	var result []entities.Student
+	for _, student := range students {
+		result = append(result, *student.ToEntity())
+	}
+
+	return result, err
 }
 
 func (r *studentRepo) FindByID(id uint) (*entities.Student, error) {
-	var student entities.Student
-	if err := r.db.First(&student, id).Error; err != nil {
+	var student models.Student
+	if err := r.db.Preload("User").First(&student, id).Error; err != nil {
 		return nil, err
 	}
-	return &student, nil
+
+	return (&student).ToEntity(), nil
 }
 
 func (r *studentRepo) Create(student *entities.Student) error {

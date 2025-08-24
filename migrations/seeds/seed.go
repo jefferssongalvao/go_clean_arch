@@ -1,8 +1,10 @@
 package seeds
 
 import (
+	"fmt"
 	"log"
 
+	valueobjects "github.com/jefferssongalvao/go_clean_arch/internal/domain/value_objects"
 	"github.com/jefferssongalvao/go_clean_arch/internal/infra/database"
 	"github.com/jefferssongalvao/go_clean_arch/internal/infra/database/models"
 )
@@ -11,9 +13,17 @@ func Run() {
 	db := database.DB
 
 	// Lista de usuários e estudantes relacionados
+	pass1, _ := valueobjects.NewPassword("Bat@123")
+
+	fmt.Println("Password 1: ", pass1)
+
+	pass2, _ := valueobjects.NewPassword("super123")
+
+	fmt.Println("Password 2: ", pass2)
+
 	users := []models.User{
-		{Username: "bruce", Password: "bat123"},
-		{Username: "clark", Password: "super123"},
+		{Username: "bruce", Password: pass1.Hash()},
+		{Username: "clark", Password: pass2.Hash()},
 	}
 
 	students := []models.Student{
