@@ -1,7 +1,7 @@
 package persistence
 
 import (
-	"github.com/jefferssongalvao/go_clean_arch/domain/entities"
+	"github.com/jefferssongalvao/go_clean_arch/internal/domain/entities"
 	"gorm.io/gorm"
 )
 

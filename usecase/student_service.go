@@ -3,7 +3,7 @@ package usecase
 import (
 	"errors"
 
-	"github.com/jefferssongalvao/go_clean_arch/domain/entities"
+	"github.com/jefferssongalvao/go_clean_arch/internal/domain/entities"
 )
 
 var (

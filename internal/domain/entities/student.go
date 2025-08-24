@@ -1,6 +1,6 @@
 package entities
 
-import valueobjects "github.com/jefferssongalvao/go_clean_arch/domain/value_objects"
+import valueobjects "github.com/jefferssongalvao/go_clean_arch/internal/domain/value_objects"
 
 type Student struct {
 	ID    uint               `json:"id"`
