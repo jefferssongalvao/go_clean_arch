@@ -10,7 +10,10 @@ import (
 func Run() {
 	db := database.DB
 
-	if err := db.AutoMigrate(&models.Student{}); err != nil {
+	if err := db.AutoMigrate(
+		&models.User{},
+		&models.Student{},
+	); err != nil {
 		log.Panic("Failed to migrate:", err)
 	}
 
