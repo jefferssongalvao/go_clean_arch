@@ -2,19 +2,20 @@ package persistence
 
 import (
 	"github.com/jefferssongalvao/go_clean_arch/internal/domain/entities"
+	"github.com/jefferssongalvao/go_clean_arch/internal/domain/interfaces"
 	"github.com/jefferssongalvao/go_clean_arch/internal/infra/database/models"
 	"gorm.io/gorm"
 )
 
-type studentRepo struct {
+type GormStudentRepository struct {
 	db *gorm.DB
 }
 
-func NewStudentRepo(db *gorm.DB) entities.StudentRepository {
-	return &studentRepo{db}
+func NewGormStudentRepository(db *gorm.DB) interfaces.StudentRepository {
+	return &GormStudentRepository{db}
 }
 
-func (r *studentRepo) FindAll(name string) ([]entities.Student, error) {
+func (r *GormStudentRepository) FindAll(name string) ([]entities.Student, error) {
 	var students []models.Student
 	query := r.db.Preload("User")
 	if name != "" {
@@ -30,7 +31,7 @@ func (r *studentRepo) FindAll(name string) ([]entities.Student, error) {
 	return result, err
 }
 
-func (r *studentRepo) FindByID(id uint) (*entities.Student, error) {
+func (r *GormStudentRepository) FindByID(id uint) (*entities.Student, error) {
 	var student models.Student
 	if err := r.db.Preload("User").First(&student, id).Error; err != nil {
 		return nil, err
@@ -39,7 +40,7 @@ func (r *studentRepo) FindByID(id uint) (*entities.Student, error) {
 	return (&student).ToEntity(), nil
 }
 
-func (r *studentRepo) Create(student *entities.Student) (*entities.Student, error) {
+func (r *GormStudentRepository) Create(student *entities.Student) (*entities.Student, error) {
 	var createdStudent *entities.Student
 	err := r.db.Transaction(func(tx *gorm.DB) error {
 		userModel := models.UserFromEntity(student.User)
@@ -65,7 +66,7 @@ func (r *studentRepo) Create(student *entities.Student) (*entities.Student, erro
 	return createdStudent, err
 }
 
-func (r *studentRepo) Update(student *entities.Student) (*entities.Student, error) {
+func (r *GormStudentRepository) Update(student *entities.Student) (*entities.Student, error) {
 	studentModel := models.StudentFromEntity(student)
 	if err := r.db.Save(studentModel).Error; err != nil {
 		return nil, err
@@ -78,6 +79,6 @@ func (r *studentRepo) Update(student *entities.Student) (*entities.Student, erro
 	return dbStudent.ToEntity(), nil
 }
 
-func (r *studentRepo) Delete(id uint) error {
+func (r *GormStudentRepository) Delete(id uint) error {
 	return r.db.Delete(&entities.Student{}, id).Error
 }

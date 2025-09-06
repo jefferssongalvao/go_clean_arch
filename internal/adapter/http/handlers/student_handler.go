@@ -1,4 +1,4 @@
-package http
+package handlers
 
 import (
 	"net/http"
@@ -8,22 +8,14 @@ import (
 	"github.com/jefferssongalvao/go_clean_arch/internal/adapter/http/dto"
 	"github.com/jefferssongalvao/go_clean_arch/internal/domain/entities"
 	valueobjects "github.com/jefferssongalvao/go_clean_arch/internal/domain/value_objects"
+	"github.com/jefferssongalvao/go_clean_arch/internal/usecase"
 )
 
-// StudentServiceInterface define as operações esperadas pelo handler
-type StudentServiceInterface interface {
-	GetAll(name string) ([]entities.Student, error)
-	GetByID(id uint) (*entities.Student, error)
-	Create(student *entities.Student) (*entities.Student, error)
-	Update(student *entities.Student) (*entities.Student, error)
-	Delete(id uint) error
-}
-
 type StudentHandler struct {
-	svc StudentServiceInterface
+	svc usecase.IStudentService
 }
 
-func NewStudentHandler(s StudentServiceInterface) *StudentHandler {
+func NewStudentHandler(s usecase.IStudentService) *StudentHandler {
 	return &StudentHandler{svc: s}
 }
 

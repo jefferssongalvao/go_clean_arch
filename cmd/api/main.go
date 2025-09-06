@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/jefferssongalvao/go_clean_arch/internal/adapter/http"
+	"github.com/jefferssongalvao/go_clean_arch/internal/adapter/http/handlers"
 	"github.com/jefferssongalvao/go_clean_arch/internal/adapter/persistence"
 	"github.com/jefferssongalvao/go_clean_arch/internal/config"
 	"github.com/jefferssongalvao/go_clean_arch/internal/usecase"
@@ -19,9 +20,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	repo := persistence.NewStudentRepo(db)
+	repo := persistence.NewGormStudentRepository(db)
 	svc := usecase.NewStudentService(repo)
-	handler := http.NewStudentHandler(svc)
+	handler := handlers.NewStudentHandler(svc)
 
 	r := http.SetupRouter(handler)
 	r.Run(":8080")

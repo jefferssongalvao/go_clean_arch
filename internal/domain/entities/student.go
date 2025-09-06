@@ -12,14 +12,6 @@ type Student struct {
 	User   *User              `json:"user"`
 }
 
-type StudentRepository interface {
-	FindAll(name string) ([]Student, error)
-	FindByID(id uint) (*Student, error)
-	Create(student *Student) (*Student, error)
-	Update(student *Student) (*Student, error)
-	Delete(id uint) error
-}
-
 func EmailFromString(s string) valueobjects.Email {
 	email, _ := valueobjects.NewEmail(s)
 	return email

@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/jefferssongalvao/go_clean_arch/internal/domain/entities"
+	"github.com/jefferssongalvao/go_clean_arch/internal/domain/interfaces"
 )
 
 var (
@@ -11,11 +12,19 @@ var (
 	ErrStudentNotFound = errors.New("student not found")
 )
 
-type StudentService struct {
-	repo entities.StudentRepository
+type IStudentService interface {
+	GetAll(name string) ([]entities.Student, error)
+	GetByID(id uint) (*entities.Student, error)
+	Create(student *entities.Student) (*entities.Student, error)
+	Update(student *entities.Student) (*entities.Student, error)
+	Delete(id uint) error
 }
 
-func NewStudentService(r entities.StudentRepository) *StudentService {
+type StudentService struct {
+	repo interfaces.StudentRepository
+}
+
+func NewStudentService(r interfaces.StudentRepository) IStudentService {
 	return &StudentService{repo: r}
 }
 
