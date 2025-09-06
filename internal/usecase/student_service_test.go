@@ -33,7 +33,7 @@ func (f *fakeRepo) Delete(id uint) error {
 	return nil
 }
 
-func TestStudentService_Create(t *testing.T) {
+func TestStudentServiceCreate(t *testing.T) {
 	repo := &fakeRepo{}
 	svc := NewStudentService(repo)
 	student := &entities.Student{Name: "Clark Kent"}
@@ -46,7 +46,7 @@ func TestStudentService_Create(t *testing.T) {
 	}
 }
 
-func TestStudentService_Create_Invalid(t *testing.T) {
+func TestStudentServiceCreateInvalid(t *testing.T) {
 	repo := &fakeRepo{}
 	svc := NewStudentService(repo)
 	student := &entities.Student{Name: ""}
