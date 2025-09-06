@@ -21,7 +21,10 @@ func NewStudentHandler(s usecase.IStudentService) *StudentHandler {
 
 func (h *StudentHandler) GetAll(c *gin.Context) {
 	name := c.Query("name")
-	students, err := h.svc.GetAll(name)
+	students, err := h.svc.GetAll(
+		c.Request.Context(),
+		name,
+	)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -53,7 +56,10 @@ func (h *StudentHandler) GetByID(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
 		return
 	}
-	student, err := h.svc.GetByID(uint(id))
+	student, err := h.svc.GetByID(
+		c.Request.Context(),
+		uint(id),
+	)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
 		return
@@ -95,7 +101,10 @@ func (h *StudentHandler) Create(c *gin.Context) {
 		},
 	}
 
-	respCreate, err := h.svc.Create(&student)
+	respCreate, err := h.svc.Create(
+		c.Request.Context(),
+		&student,
+	)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -135,7 +144,10 @@ func (h *StudentHandler) Update(c *gin.Context) {
 		Name:  req.Name,
 		Email: email,
 	}
-	respUpdate, err := h.svc.Update(&student)
+	respUpdate, err := h.svc.Update(
+		c.Request.Context(),
+		&student,
+	)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -158,7 +170,7 @@ func (h *StudentHandler) Delete(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
 		return
 	}
-	if err := h.svc.Delete(uint(id)); err != nil {
+	if err := h.svc.Delete(c.Request.Context(), uint(id)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
